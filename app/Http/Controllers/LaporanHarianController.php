@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\LaporanExport;
+use App\Models\LaporanDowntime;
 use App\Models\LaporanHarian;
 use App\Models\LaporanKerusakan;
 use App\Models\MasterMapping;
@@ -223,8 +224,13 @@ class LaporanHarianController extends Controller
             ->whereYear('created_at', $tahun)
             ->get();
 
+        // AMBIL DATA LAPORAN DOWNTIME PADA PERIODE INI
+        $laporanDowntimes = LaporanDowntime::with(['sistemLayanan', 'teknisi', 'statusDowntime'])
+            ->whereMonth('waktu_mulai', $bulan)
+            ->whereYear('waktu_mulai', $tahun)
+            ->get();
+
         // AMBIL DATA REKAP KPI KINERJA TEKNISI PADA PERIODE INI
-        // (Sesuaikan query ini dengan logic yang Anda gunakan di controller KPI Anda)
         $kpiTeknisi = LaporanHarian::with('teknisi')
             ->whereMonth('tanggal', $bulan)
             ->whereYear('tanggal', $tahun)
@@ -256,6 +262,7 @@ class LaporanHarianController extends Controller
         $pdf = Pdf::loadView('laporan.pdf_bulanan', compact(
             'allLaporan',
             'laporanKerusakan',
+            'laporanDowntimes',
             'kpiTeknisi',
             'totalSeluruhCase',
             'kategoriRekap',

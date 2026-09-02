@@ -196,7 +196,7 @@
 <body>
 
     <!-- ========================================== -->
-    <!-- HALAMAN COVER                              -->
+    <!-- HALAMAN COVER                               -->
     <!-- ========================================== -->
     <div class="cover-page">
         <div class="cover-border">
@@ -215,7 +215,8 @@
                 <tr>
                     <td style="vertical-align: middle; height: 45%;">
                         <div class="cover-logo-container">
-                            <img src="{{ public_path('image/logo-rs.png') }}" class="cover-logo" alt="Logo RS Mitra Husada">
+                            <img src="{{ public_path('image/logo-rs.png') }}" class="cover-logo"
+                                alt="Logo RS Mitra Husada">
                         </div>
                     </td>
                 </tr>
@@ -280,7 +281,10 @@
     <!-- BAB I: PENDAHULUAN -->
     <div class="section-title">I. PENDAHULUAN</div>
     <p style="text-align: justify; margin-top: 5px;">
-        Selama melaksanakan tugas dan operasional yang berlangsung selama bulan <strong>{{ $bulanName }} {{ $tahun }}</strong> di Rumah Sakit Mitra Husada Tangerang, Tim Unit IT telah mengelola pemeliharaan perangkat, jaringan, penanganan troubleshooting, rekapitulasi kerusakan aset, penilaian KPI kinerja teknisi, serta peningkatan layanan infrastruktur rumah sakit.
+        Selama melaksanakan tugas dan operasional yang berlangsung selama bulan <strong>{{ $bulanName }}
+            {{ $tahun }}</strong> di Rumah Sakit Mitra Husada Tangerang, Tim Unit IT telah mengelola pemeliharaan
+        perangkat, jaringan, penanganan troubleshooting, rekapitulasi kerusakan aset, penilaian KPI kinerja teknisi,
+        serta peningkatan layanan infrastruktur rumah sakit.
     </p>
 
     <!-- BAB II: REKAPITULASI BERDASARKAN KATEGORI -->
@@ -295,15 +299,15 @@
         </thead>
         <tbody>
             @forelse($kategoriRekap as $katName5 => $katCount)
-            <tr>
-                <td class="text-center">{{ $loop->iteration }}</td>
-                <td>{{ $katName5 }}</td>
-                <td class="text-center">{{ $katCount }} Kasus</td>
-            </tr>
+                <tr>
+                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td>{{ $katName5 }}</td>
+                    <td class="text-center">{{ $katCount }} Kasus</td>
+                </tr>
             @empty
-            <tr>
-                <td colspan="3" class="text-center">Tidak ada data kategori.</td>
-            </tr>
+                <tr>
+                    <td colspan="3" class="text-center">Tidak ada data kategori.</td>
+                </tr>
             @endforelse
             <tr style="background-color: #f9f9f9; font-weight: bold;">
                 <td colspan="2" class="text-right">TOTAL KESELURUHAN KASUS :</td>
@@ -325,20 +329,22 @@
         </thead>
         <tbody>
             @forelse($laporanKerusakan as $indexKerusakan => $kerusakan)
-            <tr>
-                <td class="text-center">{{ $indexKerusakan + 1 }}</td>
-                <td><strong>{{ $kerusakan->asset->nama_perangkat ?? 'Aset Tidak Ditemukan' }}</strong></td>
-                <td class="text-center">
-                    <span class="badge {{ $kerusakan->rekomendasi == 'beli_baru' ? 'badge-danger' : 'badge-warning' }}">
-                        {{ strtoupper(str_replace('_', ' ', $kerusakan->rekomendasi)) }}
-                    </span>
-                </td>
-                <td>Rp {{ number_format($kerusakan->estimasi_biaya, 0, ',', '.') }}</td>
-            </tr>
+                <tr>
+                    <td class="text-center">{{ $indexKerusakan + 1 }}</td>
+                    <td><strong>{{ $kerusakan->asset->nama_perangkat ?? 'Aset Tidak Ditemukan' }}</strong></td>
+                    <td class="text-center">
+                        <span
+                            class="badge {{ $kerusakan->rekomendasi == 'beli_baru' ? 'badge-danger' : 'badge-warning' }}">
+                            {{ strtoupper(str_replace('_', ' ', $kerusakan->rekomendasi)) }}
+                        </span>
+                    </td>
+                    <td>Rp {{ number_format($kerusakan->estimasi_biaya, 0, ',', '.') }}</td>
+                </tr>
             @empty
-            <tr>
-                <td colspan="4" class="text-center" style="padding: 10px; color: #777;">Tidak ada catatan kerusakan aset pada periode ini.</td>
-            </tr>
+                <tr>
+                    <td colspan="4" class="text-center" style="padding: 10px; color: #777;">Tidak ada catatan
+                        kerusakan aset pada periode ini.</td>
+                </tr>
             @endforelse
             <tr style="background-color: #f9f9f9; font-weight: bold;">
                 <td colspan="3" class="text-right">TOTAL ESTIMASI BIAYA KERUSAKAN :</td>
@@ -360,20 +366,21 @@
         </thead>
         <tbody>
             @forelse($kpiTeknisi as $indexKpi => $kpi)
-            @php
-            $safeTotal = ($totalSeluruhCase ?? 0) > 0 ? $totalSeluruhCase : 1;
-            $persentaseKpi = round(($kpi->skor / $safeTotal) * 100);
-            @endphp
-            <tr>
-                <td class="text-center font-weight-bold">{{ $indexKpi + 1 }}</td>
-                <td><strong>{{ $kpi->teknisi->name ?? 'Teknisi Tidak Ditemukan' }}</strong></td>
-                <td class="text-center">{{ number_format($kpi->skor, 1) }} Poin</td>
-                <td class="text-center">{{ $persentaseKpi }}%</td>
-            </tr>
+                @php
+                    $safeTotal = ($totalSeluruhCase ?? 0) > 0 ? $totalSeluruhCase : 1;
+                    $persentaseKpi = round(($kpi->skor / $safeTotal) * 100);
+                @endphp
+                <tr>
+                    <td class="text-center font-weight-bold">{{ $indexKpi + 1 }}</td>
+                    <td><strong>{{ $kpi->teknisi->name ?? 'Teknisi Tidak Ditemukan' }}</strong></td>
+                    <td class="text-center">{{ number_format($kpi->skor, 1) }} Poin</td>
+                    <td class="text-center">{{ $persentaseKpi }}%</td>
+                </tr>
             @empty
-            <tr>
-                <td colspan="4" class="text-center" style="padding: 10px; color: #777;">Tidak ada data KPI teknisi pada periode ini.</td>
-            </tr>
+                <tr>
+                    <td colspan="4" class="text-center" style="padding: 10px; color: #777;">Tidak ada data KPI
+                        teknisi pada periode ini.</td>
+                </tr>
             @endforelse
             <tr style="background-color: #f9f9f9; font-weight: bold;">
                 <td colspan="2" class="text-right">TOTAL POIN KESELURUHAN :</td>
@@ -382,14 +389,71 @@
         </tbody>
     </table>
 
-    <!-- BAB V: RENCANA TINDAK LANJUT (RTL) -->
-    <div class="section-title">V. RENCANA TINDAK LANJUT (RTL) & EVALUASI</div>
-    <p style="text-align: justify; margin-top: 5px; background-color: #f4f6f8; padding: 10px; border-left: 3px solid #008744;">
+    <!-- BAB V: REKAPITULASI LAPORAN DOWNTIME SISTEM / LAYANAN IT -->
+    <div class="section-title">V. REKAPITULASI LAPORAN DOWNTIME SISTEM / LAYANAN IT</div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th width="5%">No</th>
+                <th width="15%">No. Tiket</th>
+                <th width="20%">Sistem / Layanan</th>
+                <th width="20%">Waktu Gangguan</th>
+                <th width="25%">Penyebab & Perbaikan</th>
+                <th width="15%">Status / Durasi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($laporanDowntimes ?? [] as $indexDowntime => $downtime)
+                <tr>
+                    <td class="text-center">{{ $indexDowntime + 1 }}</td>
+                    <td><strong>{{ $downtime->nomor_tiket }}</strong></td>
+                    <td>
+                        <strong>{{ $downtime->sistemLayanan->name ?? '-' }}</strong><br>
+                        <small style="color: #666;">Pelapor: {{ $downtime->pelapor ?? '-' }}</small>
+                    </td>
+                    <td>
+                        <small>Mulai:
+                            {{ \Carbon\Carbon::parse($downtime->waktu_mulai)->format('d/m/Y H:i') }}</small><br>
+                        <small>Selesai:
+                            {{ $downtime->waktu_selesai ? \Carbon\Carbon::parse($downtime->waktu_selesai)->format('d/m/Y H:i') : 'Berlangsung' }}</small>
+                    </td>
+                    <td>
+                        <strong>Penyebab:</strong> {{ $downtime->penyebab }}<br>
+                        <span style="color: #2e7d32;"><strong>Solusi:</strong>
+                            {{ $downtime->tindakan_perbaikan }}</span>
+                    </td>
+                    <td class="text-center">
+                        @php
+                            $statusDowntimeName = $downtime->statusDowntime->name ?? 'Open';
+                        @endphp
+                        @if (in_array(strtolower($statusDowntimeName), ['selesai', 'resolved', 'closed']))
+                            <span class="badge badge-success">{{ $statusDowntimeName }}</span>
+                        @else
+                            <span class="badge badge-warning">{{ $statusDowntimeName }}</span>
+                        @endif
+                        @if ($downtime->durasi_menit)
+                            <br><small style="color: #555;">({{ $downtime->durasi_menit }} Menit)</small>
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center" style="padding: 15px; color: #777;">Tidak ada catatan
+                        downtime sistem pada periode ini.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <!-- BAB VI: RENCANA TINDAK LANJUT (RTL) -->
+    <div class="section-title">VI. RENCANA TINDAK LANJUT (RTL) & EVALUASI</div>
+    <p
+        style="text-align: justify; margin-top: 5px; background-color: #f4f6f8; padding: 10px; border-left: 3px solid #008744;">
         {{ $rencanaTindakLanjut }}
     </p>
 
-    <!-- BAB VI: DETAIL LOG AKTIVITAS HARIAN -->
-    <div class="section-title">VI. DETAIL TINDAK LANJUT KEGIATAN HARIAN</div>
+    <!-- BAB VII: DETAIL LOG AKTIVITAS HARIAN -->
+    <div class="section-title">VII. DETAIL TINDAK LANJUT KEGIATAN HARIAN</div>
     <table class="data-table">
         <thead>
             <tr>
@@ -403,44 +467,47 @@
         </thead>
         <tbody>
             @forelse($allLaporan as $index => $lap)
-            <tr>
-                <td class="text-center">{{ $index + 1 }}</td>
-                <td class="text-center">{{ \Carbon\Carbon::parse($lap->tanggal)->format('d/m/Y') }}</td>
-                <td>{{ $lap->unit->name ?? '-' }}</td>
-                <td>
-                    Pelapor: {{ $lap->nama_pelapor ?? '-' }}<br>
-                    <small style="color: #666;">Teknisi: {{ $lap->teknisi->name ?? '-' }}</small>
-                </td>
-                <td>
-                    <strong>Masalah:</strong> {{ $lap->masalah }}<br>
-                    @if($lap->tindak_lanjut && $lap->tindak_lanjut !== '-')
-                    <span style="color: #2e7d32;"><strong>Solusi:</strong> {{ $lap->tindak_lanjut }}</span>
-                    @endif
-                </td>
-                <td class="text-center">
-                    @php
-                    $statusName = $lap->statusTiket->name ?? 'Proses';
-                    @endphp
-                    @if(in_array(strtolower($statusName), ['selesai', 'solve', 'solved']))
-                    <span class="badge badge-success">{{ $statusName }}</span>
-                    @else
-                    <span class="badge badge-warning">{{ $statusName }}</span>
-                    @endif
-                </td>
-            </tr>
+                <tr>
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($lap->tanggal)->format('d/m/Y') }}</td>
+                    <td>{{ $lap->unit->name ?? '-' }}</td>
+                    <td>
+                        Pelapor: {{ $lap->nama_pelapor ?? '-' }}<br>
+                        <small style="color: #666;">Teknisi: {{ $lap->teknisi->name ?? '-' }}</small>
+                    </td>
+                    <td>
+                        <strong>Masalah:</strong> {{ $lap->masalah }}<br>
+                        @if ($lap->tindak_lanjut && $lap->tindak_lanjut !== '-')
+                            <span style="color: #2e7d32;"><strong>Solusi:</strong> {{ $lap->tindak_lanjut }}</span>
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        @php
+                            $statusName = $lap->statusTiket->name ?? 'Proses';
+                        @endphp
+                        @if (in_array(strtolower($statusName), ['selesai', 'solve', 'solved']))
+                            <span class="badge badge-success">{{ $statusName }}</span>
+                        @else
+                            <span class="badge badge-warning">{{ $statusName }}</span>
+                        @endif
+                    </td>
+                </tr>
             @empty
-            <tr>
-                <td colspan="6" class="text-center" style="padding: 15px; color: #777;">Tidak ada data laporan tercatat pada periode ini.</td>
-            </tr>
+                <tr>
+                    <td colspan="6" class="text-center" style="padding: 15px; color: #777;">Tidak ada data laporan
+                        tercatat pada periode ini.</td>
+                </tr>
             @endforelse
         </tbody>
     </table>
 
-    <!-- BAB VII: PENUTUP & TANDA TANGAN -->
-    <div class="section-title">VII. PENUTUP</div>
-    <p>Demikian laporan kerja unit IT ini disusun untuk dapat dipergunakan dan dijadikan bahan evaluasi manajemen sebagaimana mestinya.</p>
+    <!-- BAB VIII: PENUTUP & TANDA TANGAN -->
+    <div class="section-title">VIII. PENUTUP</div>
+    <p>Demikian laporan kerja unit IT ini disusun untuk dapat dipergunakan dan dijadikan bahan evaluasi manajemen
+        sebagaimana mestinya.</p>
 
-    <p style="text-align: right; margin-top: 10px;">Tangerang, {{ \Carbon\Carbon::create($tahun, $bulan)->endOfMonth()->translatedFormat('d F Y') }}</p>
+    <p style="text-align: right; margin-top: 10px;">Tangerang,
+        {{ \Carbon\Carbon::create($tahun, $bulan)->endOfMonth()->translatedFormat('d F Y') }}</p>
 
     <!-- Tanda Tangan Anggota & Koordinator Tim IT dengan Mapping Gambar TTD -->
     <div class="signature-container">
@@ -449,35 +516,40 @@
                 <td width="20%">
                     <br><strong>Anggota I</strong>
                     <div style="height: 40px; margin: 3px 0;">
-                        <img src="{{ public_path('image/ttd/vino.png') }}" width="65" style="height: 35px; object-fit: contain;" alt="TTD">
+                        <img src="{{ public_path('image/ttd/vino.jpg') }}" width="65"
+                            style="height: 35px; object-fit: contain;" alt="TTD">
                     </div>
                     <strong>( Vino Abdullah, S.Kom. )</strong>
                 </td>
                 <td width="20%">
                     <br><strong>Anggota II</strong>
                     <div style="height: 40px; margin: 3px 0;">
-                        <img src="{{ public_path('image/ttd/eko.png') }}" width="65" style="height: 35px; object-fit: contain;" alt="TTD">
+                        <img src="{{ public_path('image/ttd/eko.jpg') }}" width="65"
+                            style="height: 35px; object-fit: contain;" alt="TTD">
                     </div>
                     <strong>( Eko Nugie Nugroho, S.Kom. )</strong>
                 </td>
                 <td width="20%">
                     <br><strong>Anggota III</strong>
                     <div style="height: 40px; margin: 3px 0;">
-                        <img src="{{ public_path('image/ttd/ryan.png') }}" width="65" style="height: 35px; object-fit: contain;" alt="TTD">
+                        <img src="{{ public_path('image/ttd/ryan.jpg') }}" width="65"
+                            style="height: 35px; object-fit: contain;" alt="TTD">
                     </div>
                     <strong>( M. Ryan Andika, S.Kom. )</strong>
                 </td>
                 <td width="20%">
                     <br><strong>Anggota IV</strong>
                     <div style="height: 40px; margin: 3px 0;">
-                        <img src="{{ public_path('image/ttd/yudha.png') }}" width="65" style="height: 35px; object-fit: contain;" alt="TTD">
+                        <img src="{{ public_path('image/ttd/yudha.png') }}" width="65"
+                            style="height: 35px; object-fit: contain;" alt="TTD">
                     </div>
                     <strong>( Yudha Wastu Pratama, S.Kom. )</strong>
                 </td>
                 <td width="20%">
                     Mengetahui,<br><strong>Koordinator Unit IT</strong>
                     <div style="height: 40px; margin: 3px 0;">
-                        <img src="{{ public_path('image/ttd/fikri.png') }}" width="65" style="height: 35px; object-fit: contain;" alt="TTD">
+                        <img src="{{ public_path('image/ttd/fikri.jpg') }}" width="65"
+                            style="height: 35px; object-fit: contain;" alt="TTD">
                     </div>
                     <strong>( Muhamad Fikri Romadhon, S.Kom. )</strong>
                 </td>

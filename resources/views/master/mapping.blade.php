@@ -249,6 +249,44 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-md-6 pt-2">
+                        <h6 class="fw-bold text-primary mb-2"><i class='bx bx-server me-1'></i> 5. Sistem / Layanan IT
+                            (Downtime)</h6>
+                        <form action="/master-mapping/sistem_layanan" method="POST"
+                            class="input-group input-group-sm mb-2">
+                            @csrf
+                            <input type="text" class="form-control" name="name"
+                                placeholder="Contoh: SIMRS, EMR, BPJS Web Service" required>
+                            <button type="submit" class="btn btn-outline-primary">Tambah</button>
+                        </form>
+                        <div style="max-height: 180px; overflow-y: auto;">
+                            <table class="table table-bordered table-sm align-middle">
+                                <tbody>
+                                    @forelse($data['sistem_layanan'] ?? [] as $item)
+                                        <tr>
+                                            <td>{{ $item->name }}</td>
+                                            <td width="40" class="text-center">
+                                                <form action="/master-mapping/{{ $item->id }}" method="POST"
+                                                    id="form-mapping-{{ $item->id }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                        class="btn btn-sm text-danger p-0 btn-delete-global"
+                                                        data-form-id="form-mapping-{{ $item->id }}">
+                                                        <i class='bx bx-x-circle fs-5'></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center text-muted py-2">Data kosong</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 

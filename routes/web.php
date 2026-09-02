@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LaporanDowntimeController;
 use App\Http\Controllers\LaporanHarianController;
 use App\Http\Controllers\LaporanKerusakanController;
 use App\Http\Controllers\MasterMappingController;
@@ -11,6 +12,9 @@ use App\Http\Controllers\PermintaanHakAksesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/test', function () {
+    return view('test');
+});
 Route::get('permintaan-hak-akses', [PermintaanHakAksesController::class, 'create'])->name('hak-akses.create');
 Route::post('hak-akses', [PermintaanHakAksesController::class, 'store'])->name('hak-akses.store');
 Route::get('/form-perubahan', [PermintaanController::class, 'create']);
@@ -57,7 +61,7 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('/laporan-bulanan/preview', [LaporanHarianController::class, 'preview'])->name('laporan.preview');
     Route::get('/laporan/export', [LaporanHarianController::class, 'export'])->name('laporan.export');
     Route::get('/laporan/export-pdf', [App\Http\Controllers\LaporanHarianController::class, 'exportPdf'])->name('laporan.export.pdf');
-
+    Route::resource('laporan-downtime', LaporanDowntimeController::class);
     Route::resource('laporan-kerusakan', LaporanKerusakanController::class);
     Route::get('laporan-kerusakan/{id}/pdf', [LaporanKerusakanController::class, 'cetakPdf'])->name('laporan-kerusakan.pdf');
     Route::get('laporan-kerusakan/{id}/edit', [LaporanKerusakanController::class, 'edit'])->name('laporan-kerusakan.edit');

@@ -13,7 +13,7 @@ class MasterMappingController extends Controller
         $mappings = MasterMapping::all()->groupBy('type');
 
         // Memastikan key group tetap ada walaupun datanya masih kosong di database
-        $types = ['unit', 'shift', 'teknisi', 'status_tiket', 'faktor_masalah', 'jenis_perangkat', 'kondisi', 'jenis_permintaan'];
+        $types = ['unit', 'shift', 'teknisi', 'status_tiket', 'faktor_masalah', 'jenis_perangkat', 'kondisi', 'jenis_permintaan', 'sistem_layanan'];
         $data = [];
         foreach ($types as $type) {
             $data[$type] = $mappings->get($type, collect());

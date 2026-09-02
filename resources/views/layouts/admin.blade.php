@@ -232,6 +232,9 @@
             <li class="{{ Request::is('laporan-kerusakan*') ? 'active' : '' }}">
                 <a href="/laporan-kerusakan"><i class='bx bx-wrench'></i> Kerusakan Aset</a>
             </li>
+            <li class="{{ Request::is('laporan-downtime*') ? 'active' : '' }}">
+                <a href="{{ route('laporan-downtime.index') }}"><i class='bx bx-time-five'></i> Laporan Downtime</a>
+            </li>
             <li class="{{ Request::is('form-permintaan*') ? 'active' : '' }}">
                 <a href="/form-permintaan-index"><i class='bx bx-git-pull-request'></i> Permintaan IT</a>
             </li>
