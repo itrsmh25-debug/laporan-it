@@ -40,7 +40,6 @@
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
             z-index: 1050;
             transition: all 0.3s ease;
-            /* Tambahan Scroll */
             overflow-y: auto;
         }
 
@@ -69,7 +68,8 @@
             margin: 1rem 0 0.5rem 1rem;
         }
 
-        .sidebar-menu li a {
+        /* Styling Dasar Link Sidebar agar Elegan */
+        .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 15px;
@@ -80,13 +80,66 @@
             margin-bottom: 0.25rem;
             font-weight: 500;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .sidebar-menu li a:hover,
-        .sidebar-menu li.active a {
-            background-color: var(--primary-light);
-            color: var(--primary-color);
+        .sidebar-menu a:hover {
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+
+        /* --- STYLE MENU UTAMA (PARENT) DENGAN GARIS KIRI & BERSIH --- */
+        .sidebar-menu>li.has-sub {
+            position: relative;
+        }
+
+        .sidebar-menu>li.has-sub.open>a {
+            background-color: transparent !important;
+            color: var(--primary-color) !important;
             font-weight: 600;
+        }
+
+        /* Aksen garis vertikal kiri yang profesional pada induk menu yang terbuka */
+        .sidebar-menu>li.has-sub.open::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            bottom: 6px;
+            width: 4px;
+            background-color: var(--primary-color);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- STYLE MENU ANAK (SUBMENU) --- */
+        .sidebar-menu .sub-menu {
+            list-style: none;
+            padding-left: 1.5rem;
+            margin: 4px 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .sidebar-menu .has-sub.open>.sub-menu {
+            max-height: 500px;
+        }
+
+        /* Tampilan Lembut Khusus Submenu yang Sedang Aktif */
+        .sidebar-menu .sub-menu li.active>a {
+            background-color: var(--primary-light) !important;
+            color: var(--primary-color) !important;
+            font-weight: 600;
+            box-shadow: inset 0 1px 2px rgba(105, 108, 255, 0.05);
+        }
+
+        /* Rotasi panah otomatis saat dropdown terbuka */
+        .sidebar-menu .has-sub .menu-toggle .bx-chevron-down {
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-menu .has-sub.open>.menu-toggle .bx-chevron-down {
+            transform: rotate(180deg);
         }
 
         /* --- MAIN CONTENT --- */
@@ -202,6 +255,25 @@
                 display: block;
             }
         }
+
+        /* Responsif untuk Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -260px;
+                top: 0;
+                width: 260px;
+                height: 100%;
+                background: #ffffff;
+                transition: left 0.3s ease;
+                z-index: 1050;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            }
+
+            body.sidebar-show .sidebar {
+                left: 0;
+            }
+        }
     </style>
     @stack('styles')
 </head>
@@ -218,57 +290,77 @@
         <ul class="sidebar-menu">
             <!-- Dashboard Utama -->
             <li class="{{ Request::is('/') ? 'active' : '' }}">
-                <a href="/"><i class='bx bx-home-circle fs-4'></i> Dashboard</a>
+                <a href="/"><i class='bx bx-home-circle fs-4'></i> <span>Dashboard</span></a>
             </li>
 
-            <!-- Kelompok Operasional (Log & Tiket) -->
-            <li class="menu-header">OPERASIONAL</li>
-            <li class="{{ Request::is('laporan') ? 'active' : '' }}">
-                <a href="/laporan"><i class='bx bx-list-ul'></i> Log Laporan</a>
-            </li>
-            <li class="{{ Request::is('laporan-handover*') ? 'active' : '' }}">
-                <a href="/laporan-handover"><i class='bx bx-transfer-alt'></i> Operan Shift</a>
-            </li>
-            <li class="{{ Request::is('laporan-kerusakan*') ? 'active' : '' }}">
-                <a href="/laporan-kerusakan"><i class='bx bx-wrench'></i> Kerusakan Aset</a>
-            </li>
-            <li class="{{ Request::is('laporan-downtime*') ? 'active' : '' }}">
-                <a href="{{ route('laporan-downtime.index') }}"><i class='bx bx-time-five'></i> Laporan Downtime</a>
-            </li>
-            <li class="{{ Request::is('form-permintaan*') ? 'active' : '' }}">
-                <a href="/form-permintaan-index"><i class='bx bx-git-pull-request'></i> Permintaan IT</a>
-            </li>
-
-            <!-- Tambahan Menu Permintaan Hak Akses -->
-            <li class="{{ Request::is('hak-akses*') ? 'active' : '' }}">
-                <a href="{{ route('hak-akses.index') }}"><i class='bx bx-id-card'></i> Permintaan Hak Akses</a>
-            </li>
-
-            <!-- Kelompok Aset & Inventaris -->
-            <li class="menu-header">INVENTARIS</li>
-            <li class="{{ Request::is('asset*') ? 'active' : '' }}">
-                <a href="/asset"><i class='bx bx-server'></i> Kelola Aset</a>
-            </li>
-            <li class="{{ Request::is('master-mapping*') ? 'active' : '' }}">
-                <a href="/master-mapping"><i class='bx bx-cog'></i> Konfigurasi</a>
+            <!-- OPERASIONAL -->
+            <li
+                class="has-sub {{ Request::is('laporan*', 'laporan-handover*', 'laporan-kerusakan*', 'laporan-downtime*', 'form-permintaan*', 'hak-akses*') ? 'active open' : '' }}">
+                <a href="#" class="menu-toggle"><i class='bx bx-layer fs-4'></i> <span>Operasional</span> <i
+                        class='bx bx-chevron-down ms-auto'></i></a>
+                <ul class="sub-menu">
+                    <li class="{{ Request::is('laporan') ? 'active' : '' }}">
+                        <a href="/laporan"><i class='bx bx-list-ul'></i> Log Laporan</a>
+                    </li>
+                    <li class="{{ Request::is('laporan-handover*') ? 'active' : '' }}">
+                        <a href="/laporan-handover"><i class='bx bx-transfer-alt'></i> Operan Shift</a>
+                    </li>
+                    <li class="{{ Request::is('laporan-kerusakan*') ? 'active' : '' }}">
+                        <a href="/laporan-kerusakan"><i class='bx bx-wrench'></i> Kerusakan Aset</a>
+                    </li>
+                    <li class="{{ Request::is('laporan-downtime*') ? 'active' : '' }}">
+                        <a href="{{ route('laporan-downtime.index') }}"><i class='bx bx-time-five'></i> Laporan
+                            Downtime</a>
+                    </li>
+                    <li class="{{ Request::is('form-permintaan*') ? 'active' : '' }}">
+                        <a href="/form-permintaan-index"><i class='bx bx-git-pull-request'></i> Permintaan IT</a>
+                    </li>
+                    <li class="{{ Request::is('hak-akses*') ? 'active' : '' }}">
+                        <a href="{{ route('hak-akses.index') }}"><i class='bx bx-id-card'></i> Permintaan Hak Akses</a>
+                    </li>
+                </ul>
             </li>
 
-            <!-- Kelompok Analitik & SDM -->
-            <li class="menu-header">ANALITIK & SDM</li>
-            <li class="{{ Request::is('laporan-kpi') ? 'active' : '' }}">
-                <a href="/laporan-kpi"><i class='bx bx-line-chart'></i> KPI Kinerja</a>
-            </li>
-            <li class="{{ Request::is('laporan-bulanan') ? 'active' : '' }}">
-                <a href="/laporan-bulanan"><i class='bx bx-printer'></i> Cetak Laporan</a>
-            </li>
-            <li class="{{ Request::is('schedules*') ? 'active' : '' }}">
-                <a href="/schedules"><i class='bx bx-calendar'></i> Jadwal Dinas</a>
+            <!-- INVENTARIS -->
+            <li class="has-sub {{ Request::is('asset*', 'master-mapping*') ? 'active open' : '' }}">
+                <a href="#" class="menu-toggle"><i class='bx bx-server fs-4'></i> <span>Inventaris</span> <i
+                        class='bx bx-chevron-down ms-auto'></i></a>
+                <ul class="sub-menu">
+                    <li class="{{ Request::is('asset*') ? 'active' : '' }}">
+                        <a href="/asset"><i class='bx bx-server'></i> Kelola Aset</a>
+                    </li>
+                    <li class="{{ Request::is('master-mapping*') ? 'active' : '' }}">
+                        <a href="/master-mapping"><i class='bx bx-cog'></i> Konfigurasi</a>
+                    </li>
+                </ul>
             </li>
 
-            <!-- Kelompok Sistem -->
-            <li class="menu-header">ADMINISTRASI</li>
-            <li class="{{ Request::is('users*') ? 'active' : '' }}">
-                <a href="/users"><i class='bx bx-user-plus'></i> Manajemen User</a>
+            <!-- ANALITIK & SDM -->
+            <li class="has-sub {{ Request::is('laporan-kpi', 'laporan-bulanan', 'schedules*') ? 'active open' : '' }}">
+                <a href="#" class="menu-toggle"><i class='bx bx-line-chart fs-4'></i> <span>Analitik & SDM</span>
+                    <i class='bx bx-chevron-down ms-auto'></i></a>
+                <ul class="sub-menu">
+                    <li class="{{ Request::is('laporan-kpi') ? 'active' : '' }}">
+                        <a href="/laporan-kpi"><i class='bx bx-line-chart'></i> KPI Kinerja</a>
+                    </li>
+                    <li class="{{ Request::is('laporan-bulanan') ? 'active' : '' }}">
+                        <a href="/laporan-bulanan"><i class='bx bx-printer'></i> Cetak Laporan</a>
+                    </li>
+                    <li class="{{ Request::is('schedules*') ? 'active' : '' }}">
+                        <a href="/schedules"><i class='bx bx-calendar'></i> Jadwal Dinas</a>
+                    </li>
+                </ul>
+            </li>
+
+            <!-- ADMINISTRASI -->
+            <li class="has-sub {{ Request::is('users*') ? 'active open' : '' }}">
+                <a href="#" class="menu-toggle"><i class='bx bx-user-pin fs-4'></i> <span>Administrasi</span> <i
+                        class='bx bx-chevron-down ms-auto'></i></a>
+                <ul class="sub-menu">
+                    <li class="{{ Request::is('users*') ? 'active' : '' }}">
+                        <a href="/users"><i class='bx bx-user-plus'></i> Manajemen User</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
@@ -370,6 +462,34 @@
                     timer: 2000
                 });
             @endif
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Dropdown Toggle
+            const menuToggles = document.querySelectorAll(".sidebar-menu .menu-toggle");
+
+            menuToggles.forEach(function(toggle) {
+                toggle.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const parentLi = this.parentElement;
+
+                    // Opsional: Tutup menu lain jika ingin mode accordion eksklusif
+                    // document.querySelectorAll(".sidebar-menu .has-sub").forEach(item => {
+                    //     if (item !== parentLi) item.classList.remove("open");
+                    // });
+
+                    parentLi.classList.toggle("open");
+                });
+            });
+
+            // Toggle Sidebar untuk layar Mobile (Pastikan Anda punya tombol dengan id="sidebarToggle")
+            const sidebarToggler = document.getElementById("sidebarToggle");
+            if (sidebarToggler) {
+                sidebarToggler.addEventListener("click", function() {
+                    document.body.classList.toggle("sidebar-show");
+                });
+            }
         });
     </script>
     @stack('scripts')

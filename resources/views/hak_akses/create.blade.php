@@ -68,6 +68,23 @@
 
         <form action="{{ route('hak-akses.store') }}" method="POST" class="p-4">
             @csrf
+
+            {{-- Notifikasi berhasil di simpan --}}
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            {{-- Notifikasi gagal di simpan --}}
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <div class="info-box">
                 <strong>Data Personal</strong><br>
                 Silakan isi identitas diri dengan lengkap sesuai dengan KTP/STR/SIP.

@@ -40,7 +40,7 @@ class PermintaanHakAksesController extends Controller
         ]);
 
         PermintaanHakAkses::create($validated);
-        return redirect()->route('hak-akses.index')->with('success', 'Data berhasil dikirim.');
+        return redirect()->route('hak-akses.create')->with('success', 'Data berhasil dikirim.');
     }
 
     public function edit($id)
