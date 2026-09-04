@@ -254,10 +254,13 @@ class LaporanHarianController extends Controller
         $totalKerusakan = $laporanKerusakan->count();
         $totalBiayaKerusakan = $laporanKerusakan->sum('estimasi_biaya');
 
+        // HITUNG TOTAL DOWNTIME UNTUK TEKS DINAMIS
+        $totalDowntime = $laporanDowntimes->count();
+
         $topKategoriCount = $kategoriRekap->max() ?? 0;
         $topKategoriName = $kategoriRekap->search($topKategoriCount) ?? 'Tidak Ada';
 
-        $rencanaTindakLanjut = "Berdasarkan dominasi gangguan pada kategori [{$topKategoriName}] dengan total {$topKategoriCount} kejadian, serta adanya {$totalKerusakan} laporan kerusakan aset dengan estimasi total biaya perbaikan/penggantian sebesar Rp " . number_format($totalBiayaKerusakan, 0, ',', '.') . ", maka rencana tindak lanjut prioritas unit IT adalah melakukan audit hardware berkala, pemeliharaan preventif, serta pengajuan anggaran peremajaan perangkat.";
+        $rencanaTindakLanjut = "Berdasarkan dominasi gangguan pada kategori [{$topKategoriName}] dengan total {$topKategoriCount} kejadian, serta adanya {$totalKerusakan} laporan kerusakan aset dengan estimasi total biaya perbaikan/penggantian sebesar Rp " . number_format($totalBiayaKerusakan, 0, ',', '.') . ", ditambah dengan adanya {$totalDowntime} catatan laporan downtime sistem yang berdampak pada operasional, maka rencana tindak lanjut prioritas unit IT adalah melakukan audit hardware berkala, pemeliharaan preventif, peningkatan keandalan infrastruktur jaringan, serta pengajuan anggaran peremajaan perangkat dan mitigasi downtime.";
 
         $pdf = Pdf::loadView('laporan.pdf_bulanan', compact(
             'allLaporan',

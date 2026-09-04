@@ -274,7 +274,7 @@
         <tr>
             <td><strong>KOORDINATOR</strong></td>
             <td>:</td>
-            <td>Muhamad Fikri Romadhon, S.Kom.</td>
+            <td>Muhamad Fikri Ramadhon, S.Kom.</td>
         </tr>
     </table>
 
@@ -551,7 +551,7 @@
                         <img src="{{ public_path('image/ttd/fikri.jpg') }}" width="65"
                             style="height: 35px; object-fit: contain;" alt="TTD">
                     </div>
-                    <strong>( Muhamad Fikri Romadhon, S.Kom. )</strong>
+                    <strong>( Muhamad Fikri Ramadhon, S.Kom. )</strong>
                 </td>
             </tr>
         </table>

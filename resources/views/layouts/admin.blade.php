@@ -374,8 +374,8 @@
                 <div class="d-flex align-items-center gap-3" id="userProfileDropdown" data-bs-toggle="dropdown"
                     aria-expanded="false" style="cursor: pointer;">
                     <span class="text-end d-none d-md-block">
-                        <small class="d-block fw-bold">Muhamad Fikri</small>
-                        <small class="text-muted">IT Coordinator</small>
+                        <small class="d-block fw-bold">IT Staff</small>
+                        <small class="text-muted">IT RS MITRA HUSADA</small>
                     </span>
                     <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&h=80"
                         alt="Avatar" class="rounded-circle" width="40" height="40">
