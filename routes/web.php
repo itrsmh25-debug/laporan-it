@@ -15,14 +15,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test', function () {
     return view('test');
 });
+
+// ==========================================
+// RUTE PUBLIK (Bisa diakses tanpa Login)
+// ==========================================
 Route::get('permintaan-hak-akses', [PermintaanHakAksesController::class, 'create'])->name('hak-akses.create');
 Route::post('hak-akses', [PermintaanHakAksesController::class, 'store'])->name('hak-akses.store');
+
+// Jika Anda ingin seluruh fungsi Resource (create, store, show, dll) bisa diakses publik:
+// Route::resource('hak-akses', PermintaanHakAksesController::class);
+
 Route::get('/form-perubahan', [PermintaanController::class, 'create']);
 Route::post('/form-permintaan/store', [PermintaanController::class, 'store']);
+
 // 1. Rute Autentikasi (Dibuat otomatis oleh Laravel UI)
 Auth::routes(['register' => false]);
 
-// 2. Rute yang terlindungi (Hanya bisa diakses oleh user yang sudah Login)
+// ==========================================
+// RUTE TERLINDUNGI (Hanya untuk yang sudah Login)
+// ==========================================
 Route::middleware(['auth'])->group(function () {
 
     // Redirect user setelah login ke dashboard
@@ -51,14 +62,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/form-permintaan/cetak/{id}', [PermintaanController::class, 'cetakPdf']);
     Route::delete('/form-permintaan/{id}', [PermintaanController::class, 'destroy'])->name('form-permintaan.destroy');
 
-    Route::resource('hak-akses', PermintaanHakAksesController::class);
+    // Catatan: Jika ingin hak-akses khusus admin/yang login saja, biarkan di sini. 
+    // Tapi jika ingin publik, pindahkan ke luar middleware auth seperti di atas.
+    Route::get('hak-akses', [PermintaanHakAksesController::class, 'index'])->name('hak-akses.index');
+    Route::get('hak-akses/{id}/edit', [PermintaanHakAksesController::class, 'edit'])->name('hak-akses.edit');
+    Route::put('hak-akses/{id}', [PermintaanHakAksesController::class, 'update'])->name('hak-akses.update');
+    Route::delete('hak-akses/{id}', [PermintaanHakAksesController::class, 'destroy'])->name('hak-akses.destroy');
     Route::get('hak-akses/{id}', [PermintaanHakAksesController::class, 'show'])->name('hak-akses.show');
     Route::get('hak-akses/export/{id}', [PermintaanHakAksesController::class, 'cetakPdf'])->name('hak-akses.export');
 
-    // Route::get('/laporan-bulanan', [LaporanHarianController::class, 'workspace'])->name('laporan.workspace');
-
-    // // Route untuk memproses preview dan cetak dokumen
-    // Route::post('/laporan-bulanan/preview', [LaporanHarianController::class, 'preview'])->name('laporan.preview');
     Route::get('/laporan/export', [LaporanHarianController::class, 'export'])->name('laporan.export');
     Route::get('/laporan/export-pdf', [App\Http\Controllers\LaporanHarianController::class, 'exportPdf'])->name('laporan.export.pdf');
     Route::resource('laporan-downtime', LaporanDowntimeController::class);
